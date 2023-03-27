@@ -1,0 +1,74 @@
+version: '2'
+services:
+  zookeeper:
+    image: arm64v8/zookeeper
+    ports:
+      - '2181:2181'
+
+  kafka:
+    container_name: payment-kafka
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    links:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_LISTENERS: "INTERNAL://kafka:9092,\
+        EXTERNAL://:29092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:9092,\
+        EXTERNAL://order-service:29092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,\
+        EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      # KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: 'transaction-success:1:1'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  payment-db:
+    container_name: payment-db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: payment-service
+    ports:
+      - '6001:6001'
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+
+  payment-service:
+    container_name: payment-service
+    build: .
+    restart: always
+    volumes:
+      - .:/app
+    environment:
+      DB_SCHEMA: payment-service
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: payment-db
+      DB_DRIVER: postgres
+      PORT: 3003
+
+    depends_on:
+      - payment-db
+      # - kafka
+      # - zookeeper
+
+    ports:
+      - '3003:3003'
+
+volumes:
+  pgdata1: {}
+
+networks:
+  default:
+      name: ecommerce-build
+      external: true

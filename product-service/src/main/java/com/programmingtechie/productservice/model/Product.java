@@ -1,4 +1,4 @@
-package com.cc.productservice.model;
+package com.programmingtechie.productservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Data
-
 public class Product {
+
     @Id
     private String id;
     private String name;

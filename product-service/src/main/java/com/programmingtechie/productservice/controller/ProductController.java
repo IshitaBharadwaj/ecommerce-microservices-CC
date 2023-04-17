@@ -1,10 +1,8 @@
-package com.cc.productservice.controller;
+package com.programmingtechie.productservice.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.cc.productservice.dto.ProductRequest;
-import com.cc.productservice.dto.ProductResponse;
-import com.cc.productservice.service.ProductService;
+import com.programmingtechie.productservice.dto.ProductRequest;
+import com.programmingtechie.productservice.dto.ProductResponse;
+import com.programmingtechie.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
-
 public class ProductController {
+
     private final ProductService productService;
 
     @PostMapping
@@ -29,4 +27,5 @@ public class ProductController {
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
     }
+
 }

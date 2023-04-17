@@ -1,9 +1,9 @@
-package com.cc.productservice.service;
+package com.programmingtechie.productservice.service;
 
-import com.cc.productservice.dto.ProductRequest;
-import com.cc.productservice.dto.ProductResponse;
-import com.cc.productservice.model.Product;
-import com.cc.productservice.repository.ProductRepository;
+import com.programmingtechie.productservice.dto.ProductRequest;
+import com.programmingtechie.productservice.dto.ProductResponse;
+import com.programmingtechie.productservice.model.Product;
+import com.programmingtechie.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class ProductService {
+
     private final ProductRepository productRepository;
 
     public void createProduct(ProductRequest productRequest) {
@@ -42,6 +42,4 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
-
-    
 }
